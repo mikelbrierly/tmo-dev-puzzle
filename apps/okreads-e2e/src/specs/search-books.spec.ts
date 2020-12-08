@@ -16,12 +16,34 @@ describe('When: Use the search feature', () => {
     expect(items.length).toBeGreaterThan(1);
   });
 
-  xit('Then: I should see search results as I am typing', async () => {
+  it('Then: I should see search results as I am typing', async () => {
     await browser.get('/');
     await browser.wait(
       ExpectedConditions.textToBePresentInElement($('tmo-root'), 'okreads')
     );
 
-    // TODO: Implement this test!
+    const input = await $('input[type="search"]');
+
+    await input.sendKeys('dune');
+    const items = await $$('[data-testing="book-item"]');
+    expect(items.length).toBeGreaterThan(1);
+  });
+
+  // this is probably better as a unit test, but it can't hurt
+  it('Then: I should not get instant results before 500ms has passed', async () => {
+    await browser.get('/');
+    await browser.wait(
+      ExpectedConditions.textToBePresentInElement($('tmo-root'), 'okreads')
+    );
+
+    const input = await $('input[type="search"]');
+
+    await input.sendKeys('Doctor Aphra');
+    const startTime = new Date().getTime();
+    await browser.wait(
+      ExpectedConditions.presenceOf($('.book--title'))
+    );
+    const endTime = new Date().getTime();
+    expect(endTime - startTime).toBeGreaterThan(500)
   });
 });

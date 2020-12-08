@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { fromEvent } from 'rxjs';
+import { debounceTime, map } from 'rxjs/operators';
 import {
   addToReadingList,
   clearSearch,
@@ -35,6 +37,17 @@ export class BookSearchComponent implements OnInit {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+
+    const bookSearch = document.getElementById('bookSearch');
+    const keyup$ = fromEvent(bookSearch, 'keyup');
+    keyup$.pipe(
+      map((i:any) => i.currentTarget.value),
+      debounceTime(500)
+      )
+      .subscribe(term => {
+        this.searchForm.value.term = term;
+        this.searchBooks();
+      })
   }
 
   formatDate(date: void | string) {
