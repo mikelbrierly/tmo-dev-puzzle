@@ -22,9 +22,13 @@ input {
   padding: $spacing-xxs;
 }
 
+button:focus {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
 a {
   cursor: pointer;
-  color: $pink-accent;
+  color: $pink-dark;
 
   &:hover {
     color: $pink-dark;
