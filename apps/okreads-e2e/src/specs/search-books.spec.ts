@@ -22,7 +22,7 @@ describe('When: Use the search feature', () => {
       ExpectedConditions.textToBePresentInElement($('tmo-root'), 'okreads')
     );
 
-    const input = await $('input[type="search"]');
+    const input = $('input[type="search"]');
 
     await input.sendKeys('dune');
     const items = await $$('[data-testing="book-item"]');
@@ -36,7 +36,7 @@ describe('When: Use the search feature', () => {
       ExpectedConditions.textToBePresentInElement($('tmo-root'), 'okreads')
     );
 
-    const input = await $('input[type="search"]');
+    const input = $('input[type="search"]');
 
     await input.sendKeys('Doctor Aphra');
     const startTime = new Date().getTime();

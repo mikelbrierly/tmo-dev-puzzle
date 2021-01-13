@@ -1,7 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { fromEvent } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
 import {
   addToReadingList,
   clearSearch,
@@ -11,13 +9,17 @@ import {
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
   styleUrls: ['./book-search.component.scss']
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
+
   books: ReadingListBook[];
 
   searchForm = this.fb.group({
@@ -37,17 +39,14 @@ export class BookSearchComponent implements OnInit {
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
+    this.onChanges();
+  }
 
-    const bookSearch = document.getElementById('bookSearch');
-    const keyup$ = fromEvent(bookSearch, 'keyup');
-    keyup$.pipe(
-      map((i:any) => i.currentTarget.value),
-      debounceTime(500)
-      )
-      .subscribe(term => {
-        this.searchForm.value.term = term;
-        this.searchBooks();
-      })
+  onChanges(): void {
+    this.subscription = this.searchForm.valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(() => this.searchBooks())
   }
 
   formatDate(date: void | string) {
@@ -71,5 +70,9 @@ export class BookSearchComponent implements OnInit {
     } else {
       this.store.dispatch(clearSearch());
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
