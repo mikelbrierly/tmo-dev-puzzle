@@ -5,7 +5,7 @@
     </div>
     <div class="reading-list-item--details">
       <strong class="reading-list-item--details--title">{{ b.title }}</strong>
-      <div class="reading-list-item--details--author">
+      <div class="reading-list-item--details--author" *ngIf="b.authors">
         {{ b.authors.join(',') }}
       </div>
     </div>
