@@ -19,6 +19,21 @@
     flex-direction: column;
     justify-content: center;
   }
+
+  button {
+    align-items: center;
+  }
+  
+  button:first-of-type {
+    width: auto;
+    margin-right: 10px;
+    color: #008c00;
+    font-size: 12px;
+
+    mat-icon {
+      margin-bottom: 5px;
+    }
+  }
 }
 
 .reading-list-item--cover {

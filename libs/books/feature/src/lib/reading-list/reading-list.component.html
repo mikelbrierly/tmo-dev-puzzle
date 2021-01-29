@@ -5,11 +5,29 @@
     </div>
     <div class="reading-list-item--details">
       <strong class="reading-list-item--details--title">{{ b.title }}</strong>
-      <div class="reading-list-item--details--author">
+      <div class="reading-list-item--details--author" *ngIf="b.authors">
         {{ b.authors.join(',') }}
       </div>
     </div>
-    <div>
+      <button
+        mat-icon-button
+        [attr.aria-label]="b.title + ' marked as read'"
+        (click)="updateReadingList(b)"
+        *ngIf="b.finished; else book"
+      >
+        Finished {{ b.finishedDate | date:'shortDate' }}
+        <mat-icon>check</mat-icon>
+      </button>
+      <ng-template #book>
+        <button
+          mat-icon-button
+          [attr.aria-label]="'mark ' + b.title + ' as read'"
+          [attr.title]="'Mark ' + b.title + ' as read'"
+          (click)="updateReadingList(b)"
+        >
+          <mat-icon>book</mat-icon>
+        </button>
+      </ng-template>
       <button
         mat-icon-button
         color="warn"
@@ -18,7 +36,6 @@
       >
         <mat-icon>remove_circle</mat-icon>
       </button>
-    </div>
   </div>
 </ng-container>
 <ng-template #empty>
