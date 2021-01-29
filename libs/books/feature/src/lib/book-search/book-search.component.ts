@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar'; 
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
@@ -9,6 +10,7 @@ import {
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { UndoActionComponent } from '../undo-action/undo-action.component';
 
 @Component({
   selector: 'tmo-book-search',
@@ -24,7 +26,8 @@ export class BookSearchComponent implements OnInit {
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private snackBar: MatSnackBar
   ) {}
 
   get searchTerm(): string {
@@ -45,6 +48,11 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+
+    const { id, ...bookWithoutId } = book; // destructuring and spread used to assign bookWithoutId const (https://codeburst.io/use-es2015-object-rest-operator-to-omit-properties-38a3ecffe90)
+    this.snackBar.openFromComponent(UndoActionComponent, {
+      data: {book: { bookId: book.id, ...bookWithoutId }, addingBook: true},
+    });
   }
 
   searchExample() {

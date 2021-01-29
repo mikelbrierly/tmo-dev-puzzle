@@ -1,0 +1,13 @@
+<div *ngIf="data.addingBook; else removing">
+  <span><em>{{ data.book.title }}</em> added to reading list</span>
+  <button (click)="close()">Ok</button>
+  <button (click)="undoAdd(data)">Undo</button>
+</div>
+
+<ng-template #removing>
+  <div>
+    <span><em>{{ data.book.title }}</em> removed from reading list</span>
+    <button (click)="close()">Ok</button>
+    <button (click)="undoRemove(data)" [attr.aria-label]="'Undo removal of ' + data.book.title">Undo</button>
+  </div>
+</ng-template>

@@ -1,0 +1,23 @@
+div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin-left: 25px;
+  background: none;
+  border: none;
+  color: #ff4081;
+}
+
+button:first-of-type {
+  color: rgba(255,255,255,0.7);
+}
+
+button:last-of-type {
+  border-left: 1px solid darkgrey;
+  padding-left: 20px;
+}
+
+
